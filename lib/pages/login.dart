@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:wasteflix/handler/Models.dart';
 import '../pages/signup.dart';
 class LoginPage extends StatefulWidget {
+  final UserType userType;
+
+  LoginPage(this.userType);
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -101,9 +105,10 @@ class _LoginPageState extends State<LoginPage> {
                       FlatButton(
                         child: Text("Don't have an account, Sign Up"),
                         onPressed: () {
-                          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-                              builder: (BuildContext context) => SignUpPage()
-                          ), (Route route) => false);
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (BuildContext context) => SignUpPage(UserType.Client)
+                          ),
+                          );
                         },
                       )
                     ],

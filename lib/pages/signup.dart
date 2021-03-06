@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:wasteflix/handler/Models.dart';
 
 class SignUpPage extends StatefulWidget {
+  final UserType userType;
+
+  SignUpPage(this.userType);
   @override
   _SignUpPageState createState() => _SignUpPageState();
 }
@@ -20,7 +24,6 @@ class _SignUpPageState extends State<SignUpPage> {
   bool showPassword2 = true;
 
   TextEditingController _passwordController = TextEditingController();
-  TextEditingController _locationFieldController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +45,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       TextFormField(
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.person_outline),
-                          labelText: 'full name',
+                          labelText: 'Full Name',
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10)),
                         ),
@@ -62,7 +65,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       TextFormField(
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.phone),
-                          labelText: 'phone',
+                          labelText: 'Phone',
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10)),
                         ),
@@ -85,7 +88,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       TextFormField(
                         decoration: InputDecoration(
                             prefixIcon: Icon(Icons.email),
-                            labelText: 'email',
+                            labelText: 'Email',
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10))),
                         // ignore: missing_return
@@ -105,62 +108,10 @@ class _SignUpPageState extends State<SignUpPage> {
                         height: 25,
                       ),
                       TextFormField(
-                        decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.person),
-                            labelText: 'username',
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10))),
-                        // ignore: missing_return
-                        validator: (String value) {
-                          if (value.isEmpty) {
-                            return 'Your username is required';
-                          }
-                          /*else if(!RegExp(r'^[a-z]+@[a-z]+\.[a-z]+$').hasMatch(value.toLowerCase())){
-                            return 'Please enter a valid username';
-                          }*/
-                        },
-                        onSaved: (String value) {
-                          _formData['username'] = value;
-                        },
-                      ),
-                      SizedBox(
-                        height: 25,
-                      ),
-                      TextFormField(
-                          controller: _locationFieldController,
-                          decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.location_on),
-                            labelText: 'location',
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            suffixIcon: Builder(
-                              builder: (BuildContext context) =>
-                                  GestureDetector(
-                                child: Icon(Icons.my_location),
-                                onTap: () {
-                                  // model.getLocation().then((String location){
-                                  //   if(location.length == 0)
-                                  //     Scaffold.of(context).showSnackBar(SnackBar(
-                                  //         content: Text("Can't obtain location at the moment"),
-                                  //         duration: Duration(seconds: 3)
-                                  //     ));
-                                  //   setState(() {
-                                  //     _locationFieldController.text = location;
-                                  //   });
-                                  // });
-                                },
-                              ),
-                            ),
-                          ),
-                      ),
-                      SizedBox(
-                        height: 25,
-                      ),
-                      TextFormField(
                         controller: _passwordController,
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.lock),
-                          labelText: 'password',
+                          labelText: 'Password',
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10)),
                           suffixIcon: GestureDetector(
@@ -189,7 +140,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       TextFormField(
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.lock),
-                          labelText: 'confirm password',
+                          labelText: 'Confirm Password',
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10)),
                           suffixIcon: GestureDetector(
@@ -213,6 +164,20 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                       SizedBox(
                         height: 25,
+                      ),
+                      RaisedButton(
+                        textColor: Colors.white,
+                        child: Text('Sign Up'),
+                        onPressed: () {
+                          // if(_formKey.currentState.validate()){
+                          //   _formKey.currentState.save();
+                          //   if (widget.userType == UserType.Client) {
+                          //     _signupClient(model);
+                          //   } else {
+                          //     _signupVendor(model);
+                          //   }
+                          // }
+                        },
                       ),
                       FlatButton(
                         child: Text("Already have an account, Login"),
