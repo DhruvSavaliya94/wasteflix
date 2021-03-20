@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wasteflix/handler/Models.dart';
+import 'package:wasteflix/pages/dashboard.dart';
 import '../pages/signup.dart';
 class LoginPage extends StatefulWidget {
   final UserType userType;
@@ -92,6 +93,10 @@ class _LoginPageState extends State<LoginPage> {
                         textColor: Colors.white,
                         child: Text('Login'),
                         onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (BuildContext context) => Dashboard()
+                          ),
+                          );
                           // if(_formKey.currentState.validate()){
                           //   _formKey.currentState.save();
                           //   if (widget.userType == UserType.Client) {
@@ -100,7 +105,7 @@ class _LoginPageState extends State<LoginPage> {
                           //     _loginUser(model, UserType.Vendor, 'vendor_home');
                           //   }
                           // }
-                        },
+                        }
                       ),
                       FlatButton(
                         child: Text("Don't have an account, Sign Up"),
