@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wasteflix/handler/Models.dart';
 import 'package:wasteflix/pages/dashboard.dart';
 import '../pages/signup.dart';
+import 'dart:developer';
 class LoginPage extends StatefulWidget {
   final UserType userType;
 
@@ -89,10 +90,17 @@ class _LoginPageState extends State<LoginPage> {
                           onPressed: () {},
                         ),
                       ),
+                      // ignore: deprecated_member_use
                       RaisedButton(
                         textColor: Colors.white,
                         child: Text('Login'),
                         onPressed: () {
+                          // ignore: unrelated_type_equality_checks
+                          if(widget.userType == UserType.Client){
+                            print("Client");
+                          }else{
+                            print("Admin");
+                          }
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (BuildContext context) => Dashboard()
                           ),

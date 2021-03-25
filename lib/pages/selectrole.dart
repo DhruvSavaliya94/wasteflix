@@ -39,6 +39,7 @@ class _SelectRolePageState extends State<SelectRolePage> {
                 child: RichText(
                   textAlign: TextAlign.center,
                   text: TextSpan(
+                      // ignore: deprecated_member_use
                       style: Theme.of(context).textTheme.title.merge(TextStyle(
                         color: Colors.black,
                         fontFamily: 'Montserrat',

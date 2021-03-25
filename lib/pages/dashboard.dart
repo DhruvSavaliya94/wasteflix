@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wasteflix/handler/auth.dart';
+import 'package:wasteflix/pages/pickup.dart';
+import 'package:wasteflix/pages/pickupstatus.dart';
+import 'package:wasteflix/utils/constant.dart';
 import 'package:wasteflix/utils/iconcontent.dart';
 import '../utils/reusablecard.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -77,15 +80,15 @@ class _DashboardState extends State<Dashboard> {
                           context,
                           MaterialPageRoute(
                             builder: (context) {
-                              return Login();
+                              return PickupPage();
                             },
                           ),
                         );
                       },
-                      colour: Colors.deepOrange,
+                      colour: Colors.blue,
                       cardChild: IconContent(
-                        icon: FontAwesomeIcons.productHunt,
-                        label: 'Products',
+                        icon: FontAwesomeIcons.truckLoading,
+                        label: 'Pickup Request',
                       ),
                     ),
                   ),
@@ -96,59 +99,15 @@ class _DashboardState extends State<Dashboard> {
                           context,
                           MaterialPageRoute(
                             builder: (context) {
-                              return Login();
+                              return PickupStatusPage();
                             },
                           ),
                         );
                       },
-                      colour: Colors.deepOrange,
+                      colour: colorCard,
                       cardChild: IconContent(
-                        icon: CupertinoIcons.tag,
-                        label: 'Products Category',
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: ReusableCard(
-                      onPress: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return Login();
-                            },
-                          ),
-                        );
-                      },
-                      colour: Colors.deepOrange,
-                      cardChild: IconContent(
-                        icon: FontAwesomeIcons.user,
-                        label: 'Customer',
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: ReusableCard(
-                      onPress: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return Login();
-                            },
-                          ),
-                        );
-                      },
-                      colour: Colors.deepOrange,
-                      cardChild: IconContent(
-                        icon: FontAwesomeIcons.teamspeak,
-                        label: 'Supplier',
+                        icon: FontAwesomeIcons.bullhorn,
+                        label: 'Pickup Status',
                       ),
                     ),
                   ),
@@ -170,10 +129,10 @@ class _DashboardState extends State<Dashboard> {
                           ),
                         );
                       },
-                      colour: Colors.deepOrange,
+                      colour: colorCard,
                       cardChild: IconContent(
-                        icon: FontAwesomeIcons.arrowCircleUp,
-                        label: 'Sell',
+                        icon: FontAwesomeIcons.history,
+                        label: 'History',
                       ),
                     ),
                   ),
@@ -189,54 +148,10 @@ class _DashboardState extends State<Dashboard> {
                           ),
                         );
                       },
-                      colour: Colors.deepOrange,
+                      colour: colorCard,
                       cardChild: IconContent(
-                        icon: FontAwesomeIcons.arrowCircleDown,
-                        label: 'Buy',
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: ReusableCard(
-                      onPress: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return Login();
-                            },
-                          ),
-                        );
-                      },
-                      colour: Colors.deepOrange,
-                      cardChild: IconContent(
-                        icon: FontAwesomeIcons.digitalTachograph,
-                        label: 'Reports',
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: ReusableCard(
-                      onPress: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return Login();
-                            },
-                          ),
-                        );
-                      },
-                      colour: Colors.deepOrange,
-                      cardChild: IconContent(
-                        icon: FontAwesomeIcons.grinAlt,
-                        label: 'Prediction',
+                        icon: FontAwesomeIcons.moneyBill,
+                        label: 'Rate',
                       ),
                     ),
                   ),
