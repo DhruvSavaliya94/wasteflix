@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wasteflix/handler/Models.dart';
+import 'dart:convert';
+import 'package:dio/dio.dart';
 
 class SignUpPage extends StatefulWidget {
   final UserType userType;
@@ -11,19 +13,36 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final Map<String, dynamic> _formData = {
-    'name': '',
-    'phone': '',
-    'email': '',
-    'username': '',
-    'password': '',
-    'location': ''
-  };
-
+  SignUpForm user = new SignUpForm();
   bool showPassword1 = true;
   bool showPassword2 = true;
 
   TextEditingController _passwordController = TextEditingController();
+
+  Future<bool> UserSignup() async {
+    Map<String,dynamic> data = {
+      'uname': user.name,
+      'ucontact': user.contact,
+      'uemail' : user.email,
+      'urole': user.usersrole,
+      'upass': user.password
+    };
+    String body = json.encode(data);
+    print(body);
+    var dio = Dio();
+    try {
+      FormData formData = new FormData.fromMap(data);
+      var response = await dio.post("http://10.0.2.2/wasteflix-api/api/api.php?apicall=register", data: formData);
+      var jsonData = json.decode(response.data);
+      var d = jsonData["error"]=="false" ? true : false;
+      String ms = jsonData["message"];
+      _showDialog(context,ms);
+      return true;
+    } catch (e) {
+      print(e);
+    }
+    return false;
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,7 +75,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           }
                         },
                         onSaved: (String value) {
-                          _formData['name'] = value;
+                          user.name = value;
                         },
                       ),
                       SizedBox(
@@ -79,7 +98,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           }
                         },
                         onSaved: (String value) {
-                          _formData['phone'] = value;
+                          user.contact = value;
                         },
                       ),
                       SizedBox(
@@ -101,7 +120,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           }
                         },
                         onSaved: (String value) {
-                          _formData['email'] = value;
+                          user.email = value;
                         },
                       ),
                       SizedBox(
@@ -131,7 +150,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           }
                         },
                         onSaved: (String value) {
-                          _formData['password'] = value;
+                          user.password = value;
                         },
                       ),
                       SizedBox(
@@ -169,14 +188,24 @@ class _SignUpPageState extends State<SignUpPage> {
                         textColor: Colors.white,
                         child: Text('Sign Up'),
                         onPressed: () {
-                          // if(_formKey.currentState.validate()){
-                          //   _formKey.currentState.save();
-                          //   if (widget.userType == UserType.Client) {
-                          //     _signupClient(model);
-                          //   } else {
-                          //     _signupVendor(model);
-                          //   }
-                          // }
+                          if(_formKey.currentState.validate()){
+                            _formKey.currentState.save();
+                            if (widget.userType == UserType.Client) {
+                              user.usersrole=0;
+                              if(UserSignup() != null){
+                                Navigator.pop(context);
+                              }
+                            }else if(widget.userType == UserType.Admin)
+                            {
+                              user.usersrole=1;
+                              if(UserSignup() == true){
+                                Navigator.pop(context);
+                              }
+                            }
+                            else {
+                              // _signupVendor(model);
+                            }
+                          }
                         },
                       ),
                       FlatButton(
@@ -197,4 +226,35 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
     );
   }
+}
+
+class SignUpForm{
+  String name;
+  String contact;
+  String email;
+  int usersrole;
+  String password;
+}
+
+void _showDialog(BuildContext context,String msg) {
+  // flutter defined function
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      // return object of type Dialog
+      return AlertDialog(
+        title: new Text("Alert!"),
+        content: new Text(msg),
+        actions: <Widget>[
+          // usually buttons at the bottom of the dialog
+          new FlatButton(
+            child: new Text("Close"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
 }
