@@ -1,18 +1,72 @@
 import 'package:flutter/material.dart';
-
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'dart:async';
+import 'package:wasteflix/handler/Models.dart';
 class PickupStatusPage extends StatefulWidget {
+  final User logeduser;
+  PickupStatusPage(this.logeduser);
   @override
   _PickupStatusPageState createState() => _PickupStatusPageState();
 }
 
 class _PickupStatusPageState extends State<PickupStatusPage> {
+  Future<List<Request>> userData;
+  void initState(){
+    super.initState();
+    userData = _getRequest(widget.logeduser.id);
+  }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: const Text('Dashboard'),
+    return MaterialApp(
+      home: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          title: Text("Products"),
+          backgroundColor: Colors.blue,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed:() => Navigator.pop(context) ,
+          ),
+        ),
+        body: Container(
+          child: FutureBuilder<List<Request>>(
+            future: userData,
+            builder: (BuildContext context, AsyncSnapshot snapshot){
+              if(snapshot.data == null){
+                return Container(
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              } else {
+                return ListView.builder(
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return ListTile(
+                      leading: Text(snapshot.data[index].rid.toString()),
+                      title: Text("Category: ${snapshot.data[index].name}"),
+                      subtitle: Text("Description: ${snapshot.data[index].description}\ncity: ${snapshot.data[index].city}\ndate: ${snapshot.data[index].date}\nqnty: ${snapshot.data[index].qnty}\nstatus: ${snapshot.data[index].status}"
+                      ),
+                    );
+                  },
+                );
+              }
+            },
+          ),
+        ),
       ),
     );
   }
+}
+Future<List<Request>> _getRequest(int uid) async {
+  String url = "http://10.0.2.2/wasteflix-api/api/api.php?apicall=getRequest&uid="+uid.toString();
+  http.Response data = await http.get(url);
+  var jsonData = json.decode(data.body);
+  List<Request> cust = [];
+  for(var u in jsonData["Requests"]){
+    Request requests = Request(u["rid"], u["uid"], u["description"], u["name"], u["city"], u["date"],u["qnty"],u["status"]);
+    cust.add(requests);
+  }
+  return cust;
 }

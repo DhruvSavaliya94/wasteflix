@@ -1,20 +1,50 @@
+import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:wasteflix/handler/Models.dart';
 import 'package:wasteflix/pages/dashboard.dart';
 import '../pages/signup.dart';
 import 'dart:developer';
+
 class LoginPage extends StatefulWidget {
   final UserType userType;
-
   LoginPage(this.userType);
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final Map<String, dynamic> _formData = {'email': '', 'password': ''};
+  final LoginForm _loginForm = LoginForm();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool showPassword = true;
+  myBool result = myBool.False;
+  User user;
+  Future<dynamic> UserLogin() async {
+    Map<String, dynamic> data = {
+      'uemail': _loginForm.email,
+      'upassword': _loginForm.password,
+    };
+    String body = json.encode(data);
+    print(body);
+    var dio = Dio();
+    try {
+      FormData formData = new FormData.fromMap(data);
+      var response = await dio.post(
+          "http://10.0.2.2/wasteflix-api/api/api.php?apicall=login",
+          data: formData);
+      print(response.data);
+      var jsonData = json.decode(response.data);
+      dynamic d = jsonData["user"];
+
+      user = new User(d["uid"],d["user_name"],d["user_contact"],d["user_email"]);
+      print(jsonData["error"]);
+      print(jsonData["message"]);
+      return jsonData["error"];
+    } catch (e) {
+      print(e);
+    }
+    return "true";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                           }
                         },
                         onSaved: (String value) {
-                          _formData['email'] = value;
+                          _loginForm.email = value;
                         },
                       ),
                       SizedBox(
@@ -80,7 +110,7 @@ class _LoginPageState extends State<LoginPage> {
                           }
                         },
                         onSaved: (String value) {
-                          _formData['password'] = value;
+                          _loginForm.password = value;
                         },
                       ),
                       Container(
@@ -92,35 +122,38 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       // ignore: deprecated_member_use
                       RaisedButton(
-                        textColor: Colors.white,
-                        child: Text('Login'),
-                        onPressed: () {
-                          // ignore: unrelated_type_equality_checks
-                          if(widget.userType == UserType.Client){
-                            print("Client");
-                          }else{
-                            print("Admin");
-                          }
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (BuildContext context) => Dashboard()
-                          ),
-                          );
-                          // if(_formKey.currentState.validate()){
-                          //   _formKey.currentState.save();
-                          //   if (widget.userType == UserType.Client) {
-                          //     _loginUser(model, UserType.Client, 'home');
-                          //   } else {
-                          //     _loginUser(model, UserType.Vendor, 'vendor_home');
-                          //   }
-                          // }
-                        }
-                      ),
+                          textColor: Colors.black,
+                          color: Colors.blue,
+                          child: Text('Login'),
+                          onPressed: () async {
+                            if (_formKey.currentState.validate()) {
+                              _formKey.currentState.save();
+                              if (widget.userType == UserType.Client) {
+                                var value = await UserLogin();
+                                print(value.runtimeType);
+                                if(value == false){
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          Dashboard(logeduser: user),
+                                    ),
+                                  );
+                                }else{
+                                  _showDialog(context, "Something incorrect.");
+                                }
+
+                              } else {
+                                print("");
+                              }
+                            }
+                          }),
                       FlatButton(
                         child: Text("Don't have an account, Sign Up"),
                         onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (BuildContext context) => SignUpPage(UserType.Client)
-                          ),
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    SignUpPage(UserType.Client)),
                           );
                         },
                       )
@@ -134,4 +167,32 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+}
+
+class LoginForm {
+  String email;
+  String password;
+}
+
+void _showDialog(BuildContext context, String msg) {
+  // flutter defined function
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      // return object of type Dialog
+      return AlertDialog(
+        title: new Text("Alert!"),
+        content: new Text(msg),
+        actions: <Widget>[
+          // usually buttons at the bottom of the dialog
+          new FlatButton(
+            child: new Text("Close"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
 }

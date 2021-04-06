@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 5.1.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 25, 2021 at 06:48 AM
--- Server version: 10.4.13-MariaDB
--- PHP Version: 7.4.8
+-- Generation Time: Apr 06, 2021 at 06:41 PM
+-- Server version: 10.4.18-MariaDB
+-- PHP Version: 8.0.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -33,6 +33,18 @@ CREATE TABLE `category` (
   `price` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `category`
+--
+
+INSERT INTO `category` (`cid`, `name`, `price`) VALUES
+(1, 'Household', 10),
+(2, 'Industrial', 15),
+(3, 'Plastics', 8),
+(4, 'Glass', 10),
+(5, 'Paper', 15),
+(6, 'Wood', 20);
+
 -- --------------------------------------------------------
 
 --
@@ -42,14 +54,20 @@ CREATE TABLE `category` (
 CREATE TABLE `request` (
   `rid` int(11) NOT NULL,
   `uid` int(11) NOT NULL,
-  `title` int(11) NOT NULL,
-  `description` int(11) NOT NULL,
+  `description` varchar(20) NOT NULL,
   `category` int(11) NOT NULL,
-  `location` int(11) NOT NULL,
-  `date` int(11) NOT NULL,
+  `city` varchar(20) NOT NULL,
+  `date` date NOT NULL,
   `qnty` int(11) NOT NULL,
-  `status` int(11) NOT NULL
+  `status` varchar(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `request`
+--
+
+INSERT INTO `request` (`rid`, `uid`, `description`, `category`, `city`, `date`, `qnty`, `status`) VALUES
+(1, 2, 'Dis', 4, 'Savarkundla', '2020-07-20', 1, '0');
 
 -- --------------------------------------------------------
 
@@ -73,7 +91,14 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`uid`, `name`, `contact`, `email`, `urole`, `password`) VALUES
 (1, 'Dhruv', '9428870602', 'd@gmail.com', 0, '123456'),
 (2, 'Dip', '9428870603', 'dip@gmail.com', 0, '123456'),
-(3, 'Dipak', '9428870604', 'dipak@gmail.com', 0, '123456');
+(3, 'Dipak', '9428870604', 'dipak@gmail.com', 0, '123456'),
+(4, 'Dhruv', '9428870606', 'dh@gmail.com', 0, '12345'),
+(5, 'Dhruv', '9428870608', 'dhp@gmail.com', 0, '12345'),
+(6, 'Dhruv', '9428870640', 'dhkp@gmail.com', 0, '12345'),
+(7, 'Dhruv', '9428870650', 'dhfkp@gmail.com', 0, '12345'),
+(8, 'dipak', '9876543258', 'dipi@gmail.com', 0, '123456'),
+(9, 'hk', '9876543255', 'hk@gmail.com', 0, '123456'),
+(10, 'HKing', '8523698523', 'k@gmail.com', 0, '987654');
 
 --
 -- Indexes for dumped tables
@@ -106,19 +131,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `cid` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `cid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `request`
 --
 ALTER TABLE `request`
-  MODIFY `rid` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `rid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `uid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `uid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Constraints for dumped tables

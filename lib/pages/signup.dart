@@ -198,6 +198,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             }else if(widget.userType == UserType.Admin)
                             {
                               user.usersrole=1;
+                              // ignore: unrelated_type_equality_checks
                               if(UserSignup() == true){
                                 Navigator.pop(context);
                               }

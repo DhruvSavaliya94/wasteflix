@@ -1,37 +1,45 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:wasteflix/handler/Models.dart';
 import 'package:wasteflix/handler/auth.dart';
 import 'package:wasteflix/pages/pickup.dart';
 import 'package:wasteflix/pages/pickupstatus.dart';
+import 'package:wasteflix/pages/profile.dart';
 import 'package:wasteflix/utils/constant.dart';
 import 'package:wasteflix/utils/iconcontent.dart';
 import '../utils/reusablecard.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'profile.dart';
 class Dashboard extends StatefulWidget {
+  Dashboard({this.logeduser});
+  final User logeduser;
   @override
   _DashboardState createState() => _DashboardState();
 }
 
 class _DashboardState extends State<Dashboard> {
+  int uid;
+  String name;
+  String contact;
+  String email;
+
+  @override
+  void initState() {
+    super.initState();
+    updateUI(widget.logeduser);
+  }
+  void updateUI(dynamic userData) {
+    setState(() {
+      this.uid=userData.id;
+      this.name=userData.name;
+      this.contact=userData.contact;
+      this.email=userData.email;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     const drawerHeader = UserAccountsDrawerHeader(
-      accountName: Text('Dhruv Savaliya'),
-      accountEmail: Text('dhruv.savaliiya@email.com'),
-      currentAccountPicture: CircleAvatar(
-        backgroundColor: Colors.white,
-        child: FlutterLogo(size: 42.0),
-      ),
-      otherAccountsPictures: <Widget>[
-        CircleAvatar(
-          backgroundColor: Colors.blue,
-          child: Text('A'),
-        ),
-        CircleAvatar(
-          backgroundColor: Colors.red,
-          child: Text('B'),
-        )
-      ],
     );
     final drawerItems = ListView(
       children: <Widget>[
@@ -39,7 +47,7 @@ class _DashboardState extends State<Dashboard> {
         ListTile(
           leading: Icon(Icons.account_circle),
           title: const Text('Profile'),
-          onTap: () => Navigator.of(context).push(_NewPage("Profile")),
+          onTap: () => Navigator.of(context).push(_NewPage("Profile",widget.logeduser)),
         ),
         ListTile(
           leading: Icon(Icons.account_balance_wallet_rounded ),
@@ -80,7 +88,7 @@ class _DashboardState extends State<Dashboard> {
                           context,
                           MaterialPageRoute(
                             builder: (context) {
-                              return PickupPage();
+                              return PickupPage(logeduser: widget.logeduser);
                             },
                           ),
                         );
@@ -99,7 +107,7 @@ class _DashboardState extends State<Dashboard> {
                           context,
                           MaterialPageRoute(
                             builder: (context) {
-                              return PickupStatusPage();
+                              return PickupStatusPage(widget.logeduser);
                             },
                           ),
                         );
@@ -168,16 +176,56 @@ class _DashboardState extends State<Dashboard> {
   }
 }
 class _NewPage extends MaterialPageRoute<void> {
-  _NewPage(String id)
+  _NewPage(String title,User uprofile)
       : super(builder: (BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('$id'),
+        title: Text('$title'),
         elevation: 1.0,
       ),
-      body: Center(
-        child: Text('$id'),
-      ),
+      body: Container(
+        margin: EdgeInsets.symmetric(vertical: 36, horizontal: 18),
+        child: Column(
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.only(top: 18),
+              child: Column(
+                children: <Widget>[
+                  ListTile(
+                    leading: Icon(Icons.view_sidebar),
+                    title: Text('User Id'),
+                    subtitle: Text('${uprofile.id}'),
+                  ),
+                  Divider(),
+                  ListTile(
+                    leading: Icon(Icons.account_box),
+                    title: Text('User Name'),
+                    subtitle: Text('${uprofile.name}'),
+                  ),
+                  Divider(),
+                  ListTile(
+                    leading: Icon(Icons.email),
+                    title: Text('email'),
+                    subtitle: Text('${uprofile.contact}'),
+                  ),
+                  Divider(),
+                  ListTile(
+                    leading: Icon(Icons.phone),
+                    title: Text('phone number'),
+                    subtitle: Text('${uprofile.email}'),
+                  ),
+                  Divider(),
+                  ListTile(
+                    leading: Icon(Icons.admin_panel_settings),
+                    title: Text('User Role'),
+                    subtitle: Text('To:Do'),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      )
     );
   });
 }

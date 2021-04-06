@@ -7,24 +7,44 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
+import 'package:wasteflix/handler/location.dart';
 import 'package:wasteflix/main.dart';
-
+import 'package:wasteflix/pages/pickup.dart';
+import 'package:geolocator/geolocator.dart';
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp());
+//   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+//     // Build our app and trigger a frame.
+//     await tester.pumpWidget(MyApp());
+//
+//     // Verify that our counter starts at 0.
+//     expect(find.text('0'), findsOneWidget);
+//     expect(find.text('1'), findsNothing);
+//
+//     // Tap the '+' icon and trigger a frame.
+//     await tester.tap(find.byIcon(Icons.add));
+//     await tester.pump();
+//
+//     // Verify that our counter has incremented.
+//     expect(find.text('0'), findsNothing);
+//     expect(find.text('1'), findsOneWidget);
+//   });
+  Location obj = new Location();
+  obj.getCurrentLocation();
+}
+class Location {
+  double latitude;
+  double longitude;
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  Future<void> getCurrentLocation() async {
+    try {
+      Geolocator geolocator = Geolocator();
+      Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.low);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
-  });
+      latitude = position.latitude;
+      longitude = position.longitude;
+      print("$latitude,$longitude");
+    } catch (e) {
+      print(e);
+    }
+  }
 }
