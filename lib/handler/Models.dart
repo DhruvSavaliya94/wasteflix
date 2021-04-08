@@ -9,17 +9,18 @@ class User{
   String name;
   String contact;
   String email;
-
-  User(this.id,this.name,this.contact,this.email);
+  int role;
+  User(this.id,this.name,this.contact,this.email,this.role);
 }
 
 class Admin{
-  final int id;
-  final String name;
-  final String email;
-  final String contact;
+  int id;
+  String name;
+  String email;
+  String contact;
+  int role;
 
-  Admin(this.id,this.name,this.email,this.contact);
+  Admin(this.id,this.name,this.email,this.contact,this.role);
 
 }
 

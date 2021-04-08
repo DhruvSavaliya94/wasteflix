@@ -3,18 +3,18 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 import 'package:wasteflix/handler/Models.dart';
-class PickupStatusPage extends StatefulWidget {
-  final User logeduser;
-  PickupStatusPage(this.logeduser);
+class Requests extends StatefulWidget {
+  final Admin logedadmin;
+  Requests({this.logedadmin});
   @override
-  _PickupStatusPageState createState() => _PickupStatusPageState();
+  _RequestsState createState() => _RequestsState();
 }
 
-class _PickupStatusPageState extends State<PickupStatusPage> {
+class _RequestsState extends State<Requests> {
   Future<List<Request>> userData;
   void initState(){
     super.initState();
-    userData = _getRequest(widget.logeduser.id);
+    userData = _getRequest();
   }
   @override
   Widget build(BuildContext context) {
@@ -48,6 +48,12 @@ class _PickupStatusPageState extends State<PickupStatusPage> {
                       title: Text("Category: ${snapshot.data[index].name}"),
                       subtitle: Text("Description: ${snapshot.data[index].description}\nCity: ${snapshot.data[index].city}\nDate: ${snapshot.data[index].date}\nQuantity: ${snapshot.data[index].qnty}\nStatus: ${snapshot.data[index].status}"
                       ),
+                      trailing: PopupMenuButton(
+                        itemBuilder: (_) => [
+                          PopupMenuItem(child: Text("Accept")),
+                          PopupMenuItem(child: Text("Reject."))
+                        ],
+                      ),
                     );
                   },
                 );
@@ -59,8 +65,9 @@ class _PickupStatusPageState extends State<PickupStatusPage> {
     );
   }
 }
-Future<List<Request>> _getRequest(int uid) async {
-  String url = "http://10.0.2.2/wasteflix-api/api/api.php?apicall=getRequest&uid="+uid.toString();
+
+Future<List<Request>> _getRequest() async {
+  String url = "http://10.0.2.2/wasteflix-api/api/api.php?apicall=getAllRequest";
   http.Response data = await http.get(url);
   var jsonData = json.decode(data.body);
   List<Request> cust = [];

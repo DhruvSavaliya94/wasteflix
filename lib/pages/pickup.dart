@@ -166,7 +166,7 @@ class _PickupPageState extends State<PickupPage> {
                       setState(() {
                         _formRequest.uid=userid;
                           _formRequest.date="2020-07-20";
-                          _formRequest.status=0;
+                          _formRequest.status="Submitted";
                       });
                       print("Process data");
                       _formKey.currentState.save();
@@ -203,7 +203,7 @@ class FormRequest{
   String city;
   String date;
   int qnt;
-  int status;
+  String status;
 }
 
 void _showDialog(BuildContext context, String msg) {

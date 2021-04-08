@@ -3,6 +3,8 @@ import 'package:wasteflix/handler/Models.dart';
 import 'dart:convert';
 import 'package:dio/dio.dart';
 
+import 'login.dart';
+
 class SignUpPage extends StatefulWidget {
   final UserType userType;
 
@@ -42,6 +44,10 @@ class _SignUpPageState extends State<SignUpPage> {
       print(e);
     }
     return false;
+  }
+  void initState() {
+    super.initState();
+    widget.userType==UserType.Client ? user.usersrole=0 : user.usersrole=1;
   }
   @override
   Widget build(BuildContext context) {
@@ -186,20 +192,14 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                       RaisedButton(
                         textColor: Colors.white,
+                        color: Colors.blue,
                         child: Text('Sign Up'),
-                        onPressed: () {
+                        onPressed: () async {
+                          print(widget.userType);
                           if(_formKey.currentState.validate()){
                             _formKey.currentState.save();
-                            if (widget.userType == UserType.Client) {
-                              user.usersrole=0;
-                              if(UserSignup() != null){
-                                Navigator.pop(context);
-                              }
-                            }else if(widget.userType == UserType.Admin)
-                            {
-                              user.usersrole=1;
-                              // ignore: unrelated_type_equality_checks
-                              if(UserSignup() == true){
+                              bool value = await UserSignup();
+                              if(value==false){
                                 Navigator.pop(context);
                               }
                             }
@@ -207,14 +207,11 @@ class _SignUpPageState extends State<SignUpPage> {
                               // _signupVendor(model);
                             }
                           }
-                        },
                       ),
                       FlatButton(
                         child: Text("Already have an account, Login"),
                         onPressed: () {
-                          // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-                          //     builder: (BuildContext context) =>
-                          //         LoginPage(widget.userType)), (Route route) => false);
+                          Navigator.pop(context);
                         },
                       )
                     ],

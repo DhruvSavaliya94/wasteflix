@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:wasteflix/handler/Models.dart';
+import 'package:wasteflix/pages/admindashboard.dart';
 import 'package:wasteflix/pages/dashboard.dart';
 import '../pages/signup.dart';
 import 'dart:developer';
@@ -19,6 +20,7 @@ class _LoginPageState extends State<LoginPage> {
   bool showPassword = true;
   myBool result = myBool.False;
   User user;
+  int urole;
   Future<dynamic> UserLogin() async {
     Map<String, dynamic> data = {
       'uemail': _loginForm.email,
@@ -36,7 +38,8 @@ class _LoginPageState extends State<LoginPage> {
       var jsonData = json.decode(response.data);
       dynamic d = jsonData["user"];
 
-      user = new User(d["uid"],d["user_name"],d["user_contact"],d["user_email"]);
+      user = new User(d["uid"], d["user_name"], d["user_contact"], d["user_email"], d["user_role"]);
+      urole=d["user_role"];
       print(jsonData["error"]);
       print(jsonData["message"]);
       return jsonData["error"];
@@ -44,6 +47,11 @@ class _LoginPageState extends State<LoginPage> {
       print(e);
     }
     return "true";
+  }
+
+  void initState() {
+    super.initState();
+    //print(widget.userType);
   }
 
   @override
@@ -122,29 +130,33 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       // ignore: deprecated_member_use
                       RaisedButton(
-                          textColor: Colors.black,
+                          textColor: Colors.white,
                           color: Colors.blue,
                           child: Text('Login'),
                           onPressed: () async {
                             if (_formKey.currentState.validate()) {
                               _formKey.currentState.save();
-                              if (widget.userType == UserType.Client) {
+
                                 var value = await UserLogin();
-                                print(value.runtimeType);
-                                if(value == false){
+                                print(urole);
+                                if (value == false && urole==0) {
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
                                       builder: (BuildContext context) =>
                                           Dashboard(logeduser: user),
                                     ),
                                   );
-                                }else{
+                                }else if(value == false && urole==1){
+                                  Admin admin = Admin(user.id,user.name,user.contact,user.email,user.role);
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          AdminDashboard(logedadmin: admin),
+                                    ),
+                                  );
+                                }else {
                                   _showDialog(context, "Something incorrect.");
                                 }
-
-                              } else {
-                                print("");
-                              }
                             }
                           }),
                       FlatButton(
@@ -152,8 +164,9 @@ class _LoginPageState extends State<LoginPage> {
                         onPressed: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    SignUpPage(UserType.Client)),
+                              builder: (BuildContext context) =>
+                                  SignUpPage(widget.userType),
+                            ),
                           );
                         },
                       )

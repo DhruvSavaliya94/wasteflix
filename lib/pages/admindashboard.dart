@@ -1,33 +1,33 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:wasteflix/handler/Models.dart';
 import 'package:wasteflix/handler/auth.dart';
 import 'package:wasteflix/pages/pickup.dart';
 import 'package:wasteflix/pages/pickupstatus.dart';
 import 'package:wasteflix/pages/profile.dart';
+import 'package:wasteflix/pages/request.dart';
 import 'package:wasteflix/utils/constant.dart';
 import 'package:wasteflix/utils/iconcontent.dart';
 import '../utils/reusablecard.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'profile.dart';
-
-class Dashboard extends StatefulWidget {
-  Dashboard({this.logeduser});
-  final User logeduser;
+class AdminDashboard extends StatefulWidget {
+  final Admin logedadmin;
+  AdminDashboard({this.logedadmin});
   @override
-  _DashboardState createState() => _DashboardState();
+  _AdminDashboardState createState() => _AdminDashboardState();
 }
 
-class _DashboardState extends State<Dashboard> {
+class _AdminDashboardState extends State<AdminDashboard> {
   int uid;
   String name;
   String contact;
   String email;
-
+  int role;
   @override
   void initState() {
     super.initState();
-    updateUI(widget.logeduser);
+    updateUI(widget.logedadmin);
   }
   void updateUI(dynamic userData) {
     setState(() {
@@ -35,6 +35,7 @@ class _DashboardState extends State<Dashboard> {
       this.name=userData.name;
       this.contact=userData.contact;
       this.email=userData.email;
+      this.role=userData.role;
     });
   }
 
@@ -48,12 +49,7 @@ class _DashboardState extends State<Dashboard> {
         ListTile(
           leading: Icon(Icons.account_circle),
           title: const Text('Profile'),
-          onTap: () => Navigator.of(context).push(_NewPage("Profile",widget.logeduser)),
-        ),
-        ListTile(
-          leading: Icon(Icons.account_balance_wallet_rounded ),
-          title: const Text('Rewards'),
-          onTap: () {},
+          onTap: () => Navigator.of(context).push(_NewPage("Profile",widget.logedadmin)),
         ),
         ListTile(
           leading: Icon(Icons.app_registration),
@@ -63,14 +59,14 @@ class _DashboardState extends State<Dashboard> {
         ListTile(
           leading: Icon(Icons.logout),
           title: const Text('Logout'),
-          onTap: () {},
+          onTap: () => Navigator.pop(context),
         ),
       ],
     );
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: const Text('User Dashboard'),
+        title: const Text('Admin Dashboard'),
       ),
 
       //Hear is dashboard code
@@ -89,7 +85,7 @@ class _DashboardState extends State<Dashboard> {
                           context,
                           MaterialPageRoute(
                             builder: (context) {
-                              return PickupPage(logeduser: widget.logeduser);
+                              return Requests(logedadmin: widget.logedadmin);
                             },
                           ),
                         );
@@ -97,21 +93,21 @@ class _DashboardState extends State<Dashboard> {
                       colour: Colors.blue,
                       cardChild: IconContent(
                         icon: FontAwesomeIcons.truckLoading,
-                        label: 'Pickup Request',
+                        label: 'New Pickup Request',
                       ),
                     ),
                   ),
                   Expanded(
                     child: ReusableCard(
                       onPress: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return PickupStatusPage(widget.logeduser);
-                            },
-                          ),
-                        );
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) {
+                        //       return PickupStatusPage(widget.logeduser);
+                        //     },
+                        //   ),
+                        // );
                       },
                       colour: colorCard,
                       cardChild: IconContent(
@@ -141,7 +137,7 @@ class _DashboardState extends State<Dashboard> {
                       colour: colorCard,
                       cardChild: IconContent(
                         icon: FontAwesomeIcons.history,
-                        label: 'History',
+                        label: 'Transaction',
                       ),
                     ),
                   ),
@@ -176,57 +172,58 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 }
+
 class _NewPage extends MaterialPageRoute<void> {
-  _NewPage(String title,User uprofile)
+  _NewPage(String title,Admin uprofile)
       : super(builder: (BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('$title'),
-        elevation: 1.0,
-      ),
-      body: Container(
-        margin: EdgeInsets.symmetric(vertical: 36, horizontal: 18),
-        child: Column(
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.only(top: 18),
-              child: Column(
-                children: <Widget>[
-                  ListTile(
-                    leading: Icon(Icons.view_sidebar),
-                    title: Text('User Id'),
-                    subtitle: Text('${uprofile.id}'),
-                  ),
-                  Divider(),
-                  ListTile(
-                    leading: Icon(Icons.account_box),
-                    title: Text('User Name'),
-                    subtitle: Text('${uprofile.name}'),
-                  ),
-                  Divider(),
-                  ListTile(
-                    leading: Icon(Icons.email),
-                    title: Text('Email'),
-                    subtitle: Text('${uprofile.contact}'),
-                  ),
-                  Divider(),
-                  ListTile(
-                    leading: Icon(Icons.phone),
-                    title: Text('Phone number'),
-                    subtitle: Text('+91 ${uprofile.email}'),
-                  ),
-                  Divider(),
-                  ListTile(
-                    leading: Icon(Icons.admin_panel_settings),
-                    title: Text('User Role'),
-                    subtitle: Text('User'),
-                  ),
-                ],
-              ),
-            )
-          ],
+        appBar: AppBar(
+          title: Text('$title'),
+          elevation: 1.0,
         ),
-      )
+        body: Container(
+          margin: EdgeInsets.symmetric(vertical: 36, horizontal: 18),
+          child: Column(
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(top: 18),
+                child: Column(
+                  children: <Widget>[
+                    ListTile(
+                      leading: Icon(Icons.view_sidebar),
+                      title: Text('User Id'),
+                      subtitle: Text('${uprofile.id}'),
+                    ),
+                    Divider(),
+                    ListTile(
+                      leading: Icon(Icons.account_box),
+                      title: Text('User Name'),
+                      subtitle: Text('${uprofile.name}'),
+                    ),
+                    Divider(),
+                    ListTile(
+                      leading: Icon(Icons.email),
+                      title: Text('Email'),
+                      subtitle: Text('${uprofile.contact}'),
+                    ),
+                    Divider(),
+                    ListTile(
+                      leading: Icon(Icons.phone),
+                      title: Text('Phone number'),
+                      subtitle: Text('+91 ${uprofile.email}'),
+                    ),
+                    Divider(),
+                    ListTile(
+                      leading: Icon(Icons.admin_panel_settings),
+                      title: Text('User Role'),
+                      subtitle: Text('Admin'),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        )
     );
   });
 }
