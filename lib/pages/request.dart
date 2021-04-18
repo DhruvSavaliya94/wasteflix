@@ -22,8 +22,8 @@ class _RequestsState extends State<Requests> {
       home: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text("Products"),
-          backgroundColor: Colors.blue,
+          title: Text("Requests"),
+          backgroundColor: primaryColor,
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed:() => Navigator.pop(context) ,
@@ -50,9 +50,12 @@ class _RequestsState extends State<Requests> {
                       ),
                       trailing: PopupMenuButton(
                         itemBuilder: (_) => [
-                          PopupMenuItem(child: Text("Accept")),
-                          PopupMenuItem(child: Text("Reject."))
+                          PopupMenuItem(value: 1,child: Text("Accept")),
+                          PopupMenuItem(value: 0,child: Text("Reject."))
                         ],
+                        onSelected: (int value) {
+                          print('index is $value');
+                        }
                       ),
                     );
                   },
@@ -76,4 +79,11 @@ Future<List<Request>> _getRequest() async {
     cust.add(requests);
   }
   return cust;
+}
+
+Future<bool> updateStatus(int id,String status) async{
+  String url = "http://10.0.2.2/wasteflix-api/api/api.php?apicall=updateStatus&rid="+id.toString()+"&status="+status;
+  http.Response data = await http.get(url);
+  var jsonData = json.decode(data.body);
+  return true;
 }

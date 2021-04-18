@@ -6,6 +6,7 @@ import 'package:wasteflix/pages/pickup.dart';
 import 'package:wasteflix/pages/pickupstatus.dart';
 import 'package:wasteflix/pages/profile.dart';
 import 'package:wasteflix/pages/request.dart';
+import 'package:wasteflix/pages/wastecategory.dart';
 import 'package:wasteflix/utils/constant.dart';
 import 'package:wasteflix/utils/iconcontent.dart';
 import '../utils/reusablecard.dart';
@@ -42,6 +43,11 @@ class _AdminDashboardState extends State<AdminDashboard> {
   @override
   Widget build(BuildContext context) {
     const drawerHeader = UserAccountsDrawerHeader(
+      decoration: BoxDecoration(
+        color: primaryColor,
+      ),
+      accountEmail: Text(""),
+      accountName: Text(""),
     );
     final drawerItems = ListView(
       children: <Widget>[
@@ -65,7 +71,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
     );
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: primaryColor,
         title: const Text('Admin Dashboard'),
       ),
 
@@ -90,7 +96,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                           ),
                         );
                       },
-                      colour: Colors.blue,
+                      colour: primaryColor,
                       cardChild: IconContent(
                         icon: FontAwesomeIcons.truckLoading,
                         label: 'New Pickup Request',
@@ -109,7 +115,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                         //   ),
                         // );
                       },
-                      colour: colorCard,
+                      colour: primaryColor,
                       cardChild: IconContent(
                         icon: FontAwesomeIcons.bullhorn,
                         label: 'Pickup Status',
@@ -134,7 +140,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                         //   ),
                         // );
                       },
-                      colour: colorCard,
+                      colour: primaryColor,
                       cardChild: IconContent(
                         icon: FontAwesomeIcons.history,
                         label: 'Transaction',
@@ -144,19 +150,19 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   Expanded(
                     child: ReusableCard(
                       onPress: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) {
-                        //       return Login();
-                        //     },
-                        //   ),
-                        // );
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return WasteCategory();
+                            },
+                          ),
+                        );
                       },
-                      colour: colorCard,
+                      colour: primaryColor,
                       cardChild: IconContent(
-                        icon: FontAwesomeIcons.moneyBill,
-                        label: 'Rate',
+                        icon: Icons.ballot_rounded,
+                        label: 'Waste Category',
                       ),
                     ),
                   ),
@@ -178,6 +184,7 @@ class _NewPage extends MaterialPageRoute<void> {
       : super(builder: (BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: primaryColor,
           title: Text('$title'),
           elevation: 1.0,
         ),

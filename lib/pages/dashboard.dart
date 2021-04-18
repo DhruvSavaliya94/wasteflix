@@ -5,6 +5,8 @@ import 'package:wasteflix/handler/auth.dart';
 import 'package:wasteflix/pages/pickup.dart';
 import 'package:wasteflix/pages/pickupstatus.dart';
 import 'package:wasteflix/pages/profile.dart';
+import 'package:wasteflix/pages/rewards.dart';
+import 'package:wasteflix/pages/wastecategory.dart';
 import 'package:wasteflix/utils/constant.dart';
 import 'package:wasteflix/utils/iconcontent.dart';
 import '../utils/reusablecard.dart';
@@ -41,6 +43,11 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     const drawerHeader = UserAccountsDrawerHeader(
+      decoration: BoxDecoration(
+        color: primaryColor,
+      ),
+      accountEmail: Text(""),
+      accountName: Text(""),
     );
     final drawerItems = ListView(
       children: <Widget>[
@@ -53,7 +60,16 @@ class _DashboardState extends State<Dashboard> {
         ListTile(
           leading: Icon(Icons.account_balance_wallet_rounded ),
           title: const Text('Rewards'),
-          onTap: () {},
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return RewardsScreen();
+                },
+              ),
+            );
+          },
         ),
         ListTile(
           leading: Icon(Icons.app_registration),
@@ -69,7 +85,7 @@ class _DashboardState extends State<Dashboard> {
     );
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: primaryColor,
         title: const Text('User Dashboard'),
       ),
 
@@ -94,7 +110,7 @@ class _DashboardState extends State<Dashboard> {
                           ),
                         );
                       },
-                      colour: Colors.blue,
+                      colour: primaryColor,
                       cardChild: IconContent(
                         icon: FontAwesomeIcons.truckLoading,
                         label: 'Pickup Request',
@@ -113,7 +129,7 @@ class _DashboardState extends State<Dashboard> {
                           ),
                         );
                       },
-                      colour: colorCard,
+                      colour: primaryColor,
                       cardChild: IconContent(
                         icon: FontAwesomeIcons.bullhorn,
                         label: 'Pickup Status',
@@ -138,7 +154,7 @@ class _DashboardState extends State<Dashboard> {
                         //   ),
                         // );
                       },
-                      colour: colorCard,
+                      colour: primaryColor,
                       cardChild: IconContent(
                         icon: FontAwesomeIcons.history,
                         label: 'History',
@@ -148,19 +164,19 @@ class _DashboardState extends State<Dashboard> {
                   Expanded(
                     child: ReusableCard(
                       onPress: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) {
-                        //       return Login();
-                        //     },
-                        //   ),
-                        // );
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return WasteCategory();
+                            },
+                          ),
+                        );
                       },
-                      colour: colorCard,
+                      colour: primaryColor,
                       cardChild: IconContent(
-                        icon: FontAwesomeIcons.moneyBill,
-                        label: 'Rate',
+                        icon: Icons.ballot_rounded,
+                        label: 'Waste Category',
                       ),
                     ),
                   ),
@@ -181,6 +197,7 @@ class _NewPage extends MaterialPageRoute<void> {
       : super(builder: (BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: primaryColor,
         title: Text('$title'),
         elevation: 1.0,
       ),

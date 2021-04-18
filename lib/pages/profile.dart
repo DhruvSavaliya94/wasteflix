@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wasteflix/handler/Models.dart';
 class Profile extends StatefulWidget {
   @override
   _ProfileState createState() => _ProfileState();
@@ -8,6 +9,7 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: primaryColor,
       margin: EdgeInsets.symmetric(vertical: 36, horizontal: 18),
       child: Column(
         children: <Widget>[

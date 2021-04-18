@@ -15,6 +15,7 @@ class _SelectRolePageState extends State<SelectRolePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: primaryColor,
         leading: Padding(
           padding: EdgeInsets.symmetric(
             vertical: 10,

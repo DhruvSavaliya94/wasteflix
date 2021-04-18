@@ -36,5 +36,12 @@ class Request{
 
   Request(this.rid, this.uid, this.description, this.name, this.city, this.date, this.qnty, this.status);
 }
+ class Rewards{
+  final String titletext;
+  final String offertext;
+  final Widget;
 
-const Color primaryColor = Color.fromRGBO(11, 184, 74, 0.6);
+  Rewards(this.titletext, this.offertext, this.Widget);
+ }
+const Color primaryColor = Color.fromRGBO(8, 206, 82, 0.8);
+const Color secondaryColor = Color.fromRGBO(131, 246, 140, 0.8);

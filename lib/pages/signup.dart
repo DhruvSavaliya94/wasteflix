@@ -53,6 +53,7 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: primaryColor,
         title: Text('Sign Up'),
       ),
       body: Container(
@@ -192,7 +193,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                       RaisedButton(
                         textColor: Colors.white,
-                        color: Colors.blue,
+                        color: primaryColor,
                         child: Text('Sign Up'),
                         onPressed: () async {
                           print(widget.userType);

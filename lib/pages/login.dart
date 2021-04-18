@@ -58,6 +58,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: primaryColor,
         title: Text('Login'),
       ),
       body: Container(
@@ -131,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
                       // ignore: deprecated_member_use
                       RaisedButton(
                           textColor: Colors.white,
-                          color: Colors.blue,
+                          color: primaryColor,
                           child: Text('Login'),
                           onPressed: () async {
                             if (_formKey.currentState.validate()) {

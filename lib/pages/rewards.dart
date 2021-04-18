@@ -1,28 +1,28 @@
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:wasteflix/handler/Models.dart';
-class PickupStatusPage extends StatefulWidget {
-  final User logeduser;
-  PickupStatusPage(this.logeduser);
+import 'package:http/http.dart' as http;
+
+class RewardsScreen extends StatefulWidget {
   @override
-  _PickupStatusPageState createState() => _PickupStatusPageState();
+  _RewardsScreenState createState() => _RewardsScreenState();
 }
 
-class _PickupStatusPageState extends State<PickupStatusPage> {
+class _RewardsScreenState extends State<RewardsScreen> {
   Future<List<Request>> userData;
   void initState(){
     super.initState();
-    userData = _getRequest(widget.logeduser.id);
+    userData = _getRequest();
   }
+  Future<List<Rewards>> rewardData;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text("Pickups"),
+          title: Text("Rewards"),
           backgroundColor: primaryColor,
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
@@ -46,10 +46,13 @@ class _PickupStatusPageState extends State<PickupStatusPage> {
                     return ListTile(
                       leading: Text(snapshot.data[index].rid.toString()),
                       title: Text("Category: ${snapshot.data[index].name}"),
-                      subtitle: Text("Description: ${snapshot.data[index].description}\nCity: ${snapshot.data[index].city}\nDate: ${snapshot.data[index].date}\nQuantity: ${snapshot.data[index].qnty}"
+                      subtitle: Text("Description: ${snapshot.data[index].description}\nCity: ${snapshot.data[index].city}\nDate: ${snapshot.data[index].date}\nQuantity: ${snapshot.data[index].qnty}\nStatus: ${snapshot.data[index].status}"
                       ),
-                      trailing: Text("\n${snapshot.data[index].status}",
-                      style: TextStyle(color: Colors.red),
+                      trailing: PopupMenuButton(
+                        itemBuilder: (_) => [
+                          PopupMenuItem(child: Text("Accept")),
+                          PopupMenuItem(child: Text("Reject."))
+                        ],
                       ),
                     );
                   },
@@ -62,8 +65,9 @@ class _PickupStatusPageState extends State<PickupStatusPage> {
     );
   }
 }
-Future<List<Request>> _getRequest(int uid) async {
-  String url = "http://10.0.2.2/wasteflix-api/api/api.php?apicall=getRequest&uid="+uid.toString();
+
+Future<List<Request>> _getRequest() async {
+  String url = "http://10.0.2.2/wasteflix-api/api/api.php?apicall=getAllRequest";
   http.Response data = await http.get(url);
   var jsonData = json.decode(data.body);
   List<Request> cust = [];

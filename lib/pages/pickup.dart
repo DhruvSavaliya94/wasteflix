@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:wasteflix/handler/Models.dart';
 class PickupPage extends StatefulWidget {
   final logeduser;
 
@@ -78,7 +79,7 @@ class _PickupPageState extends State<PickupPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: primaryColor,
         title: const Text('Schedule Pickup'),
       ),
       body: Center(
