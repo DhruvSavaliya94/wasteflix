@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -12,6 +13,9 @@ class Requests extends StatefulWidget {
 
 class _RequestsState extends State<Requests> {
   Future<List<Request>> userData;
+  int _selectedIndex = 0;
+  int selectedRid;
+  int qn;
   void initState(){
     super.initState();
     userData = _getRequest();
@@ -48,13 +52,27 @@ class _RequestsState extends State<Requests> {
                       title: Text("Category: ${snapshot.data[index].name}"),
                       subtitle: Text("Description: ${snapshot.data[index].description}\nCity: ${snapshot.data[index].city}\nDate: ${snapshot.data[index].date}\nQuantity: ${snapshot.data[index].qnty}\nStatus: ${snapshot.data[index].status}"
                       ),
+                      selected: index == _selectedIndex,
                       trailing: PopupMenuButton(
                         itemBuilder: (_) => [
                           PopupMenuItem(value: 1,child: Text("Accept")),
                           PopupMenuItem(value: 0,child: Text("Reject."))
                         ],
-                        onSelected: (int value) {
+                        onSelected: (int value) async{
                           print('index is $value');
+                          setState(() {
+                            _selectedIndex = index;
+                            selectedRid=snapshot.data[_selectedIndex].rid;
+                            qn=snapshot.data[_selectedIndex].qnty;
+                          });
+                          print('Rid is $selectedRid');
+                          print('Qnty is $qn');
+                          if(_selectedIndex==0){
+                            updateStatus(selectedRid, "Completed.");
+                          }else{
+                            updateStatus(selectedRid, "Rejected.");
+                          }
+                          _showDialog(context,"Status updated.");
                         }
                       ),
                     );
@@ -70,7 +88,7 @@ class _RequestsState extends State<Requests> {
 }
 
 Future<List<Request>> _getRequest() async {
-  String url = "http://10.0.2.2/wasteflix-api/api/api.php?apicall=getAllRequest";
+  String url = "http://10.0.2.2/wasteflix-api/api/api.php?apicall=getAllSRequest";
   http.Response data = await http.get(url);
   var jsonData = json.decode(data.body);
   List<Request> cust = [];
@@ -81,9 +99,70 @@ Future<List<Request>> _getRequest() async {
   return cust;
 }
 
-Future<bool> updateStatus(int id,String status) async{
+Future<void> updateStatus(int id,String status) async{
   String url = "http://10.0.2.2/wasteflix-api/api/api.php?apicall=updateStatus&rid="+id.toString()+"&status="+status;
   http.Response data = await http.get(url);
   var jsonData = json.decode(data.body);
-  return true;
+  print(jsonData);
+  print(jsonData['message']);
+  print(jsonData['requestId']);
+  var rid,uid,name,partner,vouc_code,offer;
+  var price=jsonData['requestDetails'][0]['price'];
+  var qnt=jsonData['requestDetails'][0]['qnty'];
+  int total = price*qnt;
+  rid = jsonData['requestDetails'][0]['rid'];
+  uid = jsonData['requestDetails'][0]['uid'];
+  name = "Cashback Offer";
+  partner = "Amazon";
+  vouc_code = "GET"+total.toString();
+  offer = "Recharge Cashback";
+  if(status=="Completed."){
+    creditRewards(id,rid,uid,name,partner,vouc_code,offer);
+  }
 }
+Future<void> creditRewards(int id,var rid,var uid,var name,var partner,var vouc_code,var offer) async{
+  String url = "http://10.0.2.2/wasteflix-api/api/api.php?apicall=creditRewards";
+  Map<String,dynamic> data = {
+    'rid': rid,
+    'uid': uid,
+    'name' : name,
+    'partner': partner,
+    'vouc_code': vouc_code,
+    'offer': offer,
+  };
+  String body = json.encode(data);
+  print(body);
+  var dio = Dio();
+  try {
+    FormData formData = new FormData.fromMap(data);
+    var response = await dio.post(url,data: formData);
+    var jsonData = json.decode(response.data);
+    String ms = jsonData["message"];
+    print(ms);
+  } catch (e) {
+    print(e);
+  }
+}
+void _showDialog(BuildContext context, String msg) {
+  // flutter defined function
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      // return object of type Dialog
+      return AlertDialog(
+        title: new Text("Alert!"),
+        content: new Text(msg),
+        actions: <Widget>[
+          // usually buttons at the bottom of the dialog
+          new FlatButton(
+            child: new Text("Close"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+

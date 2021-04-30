@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:wasteflix/handler/Models.dart';
 import 'package:wasteflix/handler/auth.dart';
 import 'package:wasteflix/pages/pickup.dart';
+import 'package:wasteflix/pages/pickupsadmin.dart';
 import 'package:wasteflix/pages/pickupstatus.dart';
 import 'package:wasteflix/pages/profile.dart';
 import 'package:wasteflix/pages/request.dart';
@@ -106,14 +107,14 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   Expanded(
                     child: ReusableCard(
                       onPress: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) {
-                        //       return PickupStatusPage(widget.logeduser);
-                        //     },
-                        //   ),
-                        // );
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return PickupStatusAdminPage(widget.logedadmin);
+                            },
+                          ),
+                        );
                       },
                       colour: primaryColor,
                       cardChild: IconContent(

@@ -167,7 +167,7 @@ class _PickupPageState extends State<PickupPage> {
                       setState(() {
                         _formRequest.uid=userid;
                           _formRequest.date="2020-07-20";
-                          _formRequest.status="Submitted";
+                          _formRequest.status="Submitted.";
                       });
                       print("Process data");
                       _formKey.currentState.save();

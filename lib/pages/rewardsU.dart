@@ -1,28 +1,28 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:wasteflix/handler/Models.dart';
 import 'package:http/http.dart' as http;
-
-class RewardsScreen extends StatefulWidget {
+import 'dart:convert';
+import 'dart:async';
+import 'package:wasteflix/handler/Models.dart';
+class RewardsPage extends StatefulWidget {
+  final User logeduser;
+  RewardsPage(this.logeduser);
   @override
-  _RewardsScreenState createState() => _RewardsScreenState();
+  _RewardsPageState createState() => _RewardsPageState();
 }
 
-class _RewardsScreenState extends State<RewardsScreen> {
-  Future<List<Request>> userData;
+class _RewardsPageState extends State<RewardsPage> {
+  Future<List<Rewards>> userData;
   void initState(){
     super.initState();
-    userData = _getRequest();
+    userData = _getRewards(widget.logeduser.id);
   }
-  Future<List<Rewards>> rewardData;
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text("Rewards"),
+          title: Text("Pickups History"),
           backgroundColor: primaryColor,
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
@@ -30,7 +30,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
           ),
         ),
         body: Container(
-          child: FutureBuilder<List<Request>>(
+          child: FutureBuilder<List<Rewards>>(
             future: userData,
             builder: (BuildContext context, AsyncSnapshot snapshot){
               if(snapshot.data == null){
@@ -44,15 +44,12 @@ class _RewardsScreenState extends State<RewardsScreen> {
                   itemCount: snapshot.data.length,
                   itemBuilder: (BuildContext context, int index) {
                     return ListTile(
-                      leading: Text(snapshot.data[index].rid.toString()),
-                      title: Text("Category: ${snapshot.data[index].name}"),
-                      subtitle: Text("Description: ${snapshot.data[index].description}\nCity: ${snapshot.data[index].city}\nDate: ${snapshot.data[index].date}\nQuantity: ${snapshot.data[index].qnty}\nStatus: ${snapshot.data[index].status}"
+                      leading: Text(snapshot.data[index].reid.toString()),
+                      title: Text("RequestId: ${snapshot.data[index].rid}"),
+                      subtitle: Text("Username: ${snapshot.data[index].uname}\nRewards name: ${snapshot.data[index].rname}\nPartner: ${snapshot.data[index].partner}\nOffer: ${snapshot.data[index].offer}"
                       ),
-                      trailing: PopupMenuButton(
-                        itemBuilder: (_) => [
-                          PopupMenuItem(child: Text("Accept")),
-                          PopupMenuItem(child: Text("Reject."))
-                        ],
+                      trailing: Text("\n${snapshot.data[index].vouc_code}",
+                        style: TextStyle(color: Colors.red),
                       ),
                     );
                   },
@@ -65,15 +62,14 @@ class _RewardsScreenState extends State<RewardsScreen> {
     );
   }
 }
-
-Future<List<Request>> _getRequest() async {
-  String url = "http://10.0.2.2/wasteflix-api/api/api.php?apicall=getAllRequest";
+Future<List<Rewards>> _getRewards(int uid) async {
+  String url = "http://10.0.2.2/wasteflix-api/api/api.php?apicall=getRewards&uid="+uid.toString();
   http.Response data = await http.get(url);
   var jsonData = json.decode(data.body);
-  List<Request> cust = [];
+  List<Rewards> cust = [];
   for(var u in jsonData["Requests"]){
-    Request requests = Request(u["rid"], u["uid"], u["description"], u["name"], u["city"], u["date"],u["qnty"],u["status"]);
-    cust.add(requests);
+    Rewards rewards = Rewards(u["reid"], u["rid"], u["uname"], u["rname"], u["partner"], u["vouc_code"],u["offer"]);
+    cust.add(rewards);
   }
   return cust;
 }

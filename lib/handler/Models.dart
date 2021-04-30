@@ -37,11 +37,15 @@ class Request{
   Request(this.rid, this.uid, this.description, this.name, this.city, this.date, this.qnty, this.status);
 }
  class Rewards{
-  final String titletext;
-  final String offertext;
-  final Widget;
+  final int reid;
+  final int rid;
+  final String uname;
+  final String rname;
+  final String partner;
+  final String vouc_code;
+  final String offer;
 
-  Rewards(this.titletext, this.offertext, this.Widget);
+  Rewards(this.reid, this.rid, this.uname, this.rname, this.partner, this.vouc_code, this.offer);
  }
 const Color primaryColor = Color.fromRGBO(8, 206, 82, 0.8);
 const Color secondaryColor = Color.fromRGBO(131, 246, 140, 0.8);

@@ -2,10 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wasteflix/handler/Models.dart';
 import 'package:wasteflix/handler/auth.dart';
+import 'package:wasteflix/pages/rewardsU.dart';
 import 'package:wasteflix/pages/pickup.dart';
 import 'package:wasteflix/pages/pickupstatus.dart';
 import 'package:wasteflix/pages/profile.dart';
-import 'package:wasteflix/pages/rewards.dart';
+import 'package:wasteflix/pages/history.dart';
 import 'package:wasteflix/pages/wastecategory.dart';
 import 'package:wasteflix/utils/constant.dart';
 import 'package:wasteflix/utils/iconcontent.dart';
@@ -65,7 +66,7 @@ class _DashboardState extends State<Dashboard> {
               context,
               MaterialPageRoute(
                 builder: (context) {
-                  return RewardsScreen();
+                  return RewardsPage(widget.logeduser);
                 },
               ),
             );
@@ -145,14 +146,14 @@ class _DashboardState extends State<Dashboard> {
                   Expanded(
                     child: ReusableCard(
                       onPress: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) {
-                        //       return Login();
-                        //     },
-                        //   ),
-                        // );
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return HistoryPage(widget.logeduser);
+                            },
+                          ),
+                        );
                       },
                       colour: primaryColor,
                       cardChild: IconContent(
