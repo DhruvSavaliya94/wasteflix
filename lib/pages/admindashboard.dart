@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:wasteflix/handler/Models.dart';
 import 'package:wasteflix/handler/auth.dart';
+import 'package:wasteflix/pages/about.dart';
 import 'package:wasteflix/pages/pickup.dart';
 import 'package:wasteflix/pages/pickupsadmin.dart';
 import 'package:wasteflix/pages/pickupstatus.dart';
 import 'package:wasteflix/pages/profile.dart';
 import 'package:wasteflix/pages/request.dart';
+import 'package:wasteflix/pages/rewardsA.dart';
+import 'package:wasteflix/pages/selectrole.dart';
 import 'package:wasteflix/pages/wastecategory.dart';
 import 'package:wasteflix/utils/constant.dart';
 import 'package:wasteflix/utils/iconcontent.dart';
@@ -61,12 +64,30 @@ class _AdminDashboardState extends State<AdminDashboard> {
         ListTile(
           leading: Icon(Icons.app_registration),
           title: const Text('About'),
-          onTap: () {},
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return AboutPage();
+                },
+              ),
+            );
+          },
         ),
         ListTile(
           leading: Icon(Icons.logout),
           title: const Text('Logout'),
-          onTap: () => Navigator.pop(context),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return SelectRolePage();
+                },
+              ),
+            );
+          },
         ),
       ],
     );
@@ -132,19 +153,19 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   Expanded(
                     child: ReusableCard(
                       onPress: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) {
-                        //       return Login();
-                        //     },
-                        //   ),
-                        // );
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return RewardsHistory(widget.logedadmin);
+                            },
+                          ),
+                        );
                       },
                       colour: primaryColor,
                       cardChild: IconContent(
                         icon: FontAwesomeIcons.history,
-                        label: 'Transaction',
+                        label: 'Rewards History',
                       ),
                     ),
                   ),

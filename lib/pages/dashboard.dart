@@ -2,11 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wasteflix/handler/Models.dart';
 import 'package:wasteflix/handler/auth.dart';
+import 'package:wasteflix/pages/about.dart';
 import 'package:wasteflix/pages/rewardsU.dart';
 import 'package:wasteflix/pages/pickup.dart';
 import 'package:wasteflix/pages/pickupstatus.dart';
 import 'package:wasteflix/pages/profile.dart';
 import 'package:wasteflix/pages/history.dart';
+import 'package:wasteflix/pages/selectrole.dart';
 import 'package:wasteflix/pages/wastecategory.dart';
 import 'package:wasteflix/utils/constant.dart';
 import 'package:wasteflix/utils/iconcontent.dart';
@@ -75,12 +77,30 @@ class _DashboardState extends State<Dashboard> {
         ListTile(
           leading: Icon(Icons.app_registration),
           title: const Text('About'),
-          onTap: () {},
+          onTap: (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return AboutPage();
+                },
+              ),
+            );
+          },
         ),
         ListTile(
           leading: Icon(Icons.logout),
           title: const Text('Logout'),
-          onTap: () {},
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return SelectRolePage();
+                },
+              ),
+            );
+          },
         ),
       ],
     );

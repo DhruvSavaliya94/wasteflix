@@ -22,7 +22,7 @@ class _RewardsPageState extends State<RewardsPage> {
       home: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text("Pickups History"),
+          title: Text("Rewards"),
           backgroundColor: primaryColor,
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
