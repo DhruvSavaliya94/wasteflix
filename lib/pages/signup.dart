@@ -3,7 +3,6 @@ import 'package:wasteflix/handler/Models.dart';
 import 'dart:convert';
 import 'package:dio/dio.dart';
 
-import 'login.dart';
 
 class SignUpPage extends StatefulWidget {
   final UserType userType;
@@ -36,7 +35,6 @@ class _SignUpPageState extends State<SignUpPage> {
       FormData formData = new FormData.fromMap(data);
       var response = await dio.post("http://10.0.2.2/wasteflix-api/api/api.php?apicall=register", data: formData);
       var jsonData = json.decode(response.data);
-      var d = jsonData["error"]=="false" ? true : false;
       String ms = jsonData["message"];
       _showDialog(context,ms);
       return true;
@@ -97,9 +95,9 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                         // ignore: missing_return
                         validator: (String value) {
-                          if (value.isEmpty) {
-                            return 'Your phone number is required';
-                          } else if (!RegExp(r'^[0-9]+$')
+                          if (value.isEmpty || value.length!=10) {
+                            return 'Your valid phone number is required';
+                          } else if (!RegExp(r'^[6-9]\d{9}$')
                               .hasMatch(value.toLowerCase())) {
                             return 'Please enter a valid phone number';
                           }

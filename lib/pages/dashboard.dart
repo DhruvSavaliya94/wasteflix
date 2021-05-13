@@ -1,20 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wasteflix/handler/Models.dart';
-import 'package:wasteflix/handler/auth.dart';
 import 'package:wasteflix/pages/about.dart';
 import 'package:wasteflix/pages/rewardsU.dart';
 import 'package:wasteflix/pages/pickup.dart';
 import 'package:wasteflix/pages/pickupstatus.dart';
-import 'package:wasteflix/pages/profile.dart';
 import 'package:wasteflix/pages/history.dart';
 import 'package:wasteflix/pages/selectrole.dart';
 import 'package:wasteflix/pages/wastecategory.dart';
-import 'package:wasteflix/utils/constant.dart';
 import 'package:wasteflix/utils/iconcontent.dart';
 import '../utils/reusablecard.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'profile.dart';
 
 class Dashboard extends StatefulWidget {
   Dashboard({this.logeduser});

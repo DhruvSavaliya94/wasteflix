@@ -15,9 +15,3 @@ class Date{
     return this.date;
   }
 }
-
-Future<void> main() async {
-  Date d = new Date();
-  String val = await d.getDate();
-  print(val);
-}

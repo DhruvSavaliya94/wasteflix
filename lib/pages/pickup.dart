@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:wasteflix/handler/Models.dart';
+import 'package:wasteflix/handler/date.dart';
 class PickupPage extends StatefulWidget {
   final logeduser;
 
@@ -15,7 +16,7 @@ class PickupPage extends StatefulWidget {
 
 class _PickupPageState extends State<PickupPage> {
   int userid;
-
+  String today;
   final _formKey = GlobalKey<FormState>();
   FormRequest _formRequest = new FormRequest();
   List<CategoryListItem> _categoryListItem;
@@ -33,6 +34,8 @@ class _PickupPageState extends State<PickupPage> {
       CategoryListItem(u["cid"], u["name"],u["price"]);
       cust.add(categoryListItem);
     }
+    Date d = new Date();
+    String val = await d.getDate();
     setState(() {
       _dropDownMenuItems = cust
           .map((CategoryListItem value) => DropdownMenuItem(
@@ -40,6 +43,7 @@ class _PickupPageState extends State<PickupPage> {
         child: Text(value.name),
       ))
           .toList();
+      this.today=val;
     });
   }
   Future<bool> _AddRequest() async {
@@ -166,7 +170,7 @@ class _PickupPageState extends State<PickupPage> {
                     if (_formKey.currentState.validate()) {
                       setState(() {
                         _formRequest.uid=userid;
-                          _formRequest.date="2020-07-20";
+                          _formRequest.date=this.today;
                           _formRequest.status="Submitted.";
                       });
                       print("Process data");

@@ -12,10 +12,11 @@ class HistoryPage extends StatefulWidget {
 
 class _HistoryPageState extends State<HistoryPage> {
   Future<List<Request>> userData;
-  void initState(){
+  void initState() {
     super.initState();
     userData = _getRequest(widget.logeduser.id);
   }
+
   Future<List<Rewards>> rewardData;
 
   @override
@@ -28,14 +29,14 @@ class _HistoryPageState extends State<HistoryPage> {
           backgroundColor: primaryColor,
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
-            onPressed:() => Navigator.pop(context) ,
+            onPressed: () => Navigator.pop(context),
           ),
         ),
         body: Container(
           child: FutureBuilder<List<Request>>(
             future: userData,
-            builder: (BuildContext context, AsyncSnapshot snapshot){
-              if(snapshot.data == null){
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.data == null) {
                 return Container(
                   child: Center(
                     child: CircularProgressIndicator(),
@@ -46,11 +47,14 @@ class _HistoryPageState extends State<HistoryPage> {
                   itemCount: snapshot.data.length,
                   itemBuilder: (BuildContext context, int index) {
                     return ListTile(
-                      leading: Text(snapshot.data[index].rid.toString()),
-                      title: Text("Category: ${snapshot.data[index].name}"),
-                      subtitle: Text("Description: ${snapshot.data[index].description}\nCity: ${snapshot.data[index].city}\nDate: ${snapshot.data[index].date}\nQuantity: ${snapshot.data[index].qnty}\nStatus: ${snapshot.data[index].status}"
-                      ),
-                    );
+                        leading: Text(snapshot.data[index].rid.toString()),
+                        title: Text("Category: ${snapshot.data[index].name}"),
+                        subtitle: Text(
+                            "Description: ${snapshot.data[index].description}\nCity: ${snapshot.data[index].city}\nDate: ${snapshot.data[index].date}\nQuantity: ${snapshot.data[index].qnty}"),
+                        trailing: Text(
+                          "\n${snapshot.data[index].status}",
+                          style: TextStyle(color: Colors.red),
+                        ));
                   },
                 );
               }
@@ -63,12 +67,15 @@ class _HistoryPageState extends State<HistoryPage> {
 }
 
 Future<List<Request>> _getRequest(int uid) async {
-  String url = "http://10.0.2.2/wasteflix-api/api/api.php?apicall=getRequestHistory&uid="+uid.toString();
+  String url =
+      "http://10.0.2.2/wasteflix-api/api/api.php?apicall=getRequestHistory&uid=" +
+          uid.toString();
   http.Response data = await http.get(url);
   var jsonData = json.decode(data.body);
   List<Request> cust = [];
-  for(var u in jsonData["Requests"]){
-    Request requests = Request(u["rid"], u["uid"], u["description"], u["name"], u["city"], u["date"],u["qnty"],u["status"]);
+  for (var u in jsonData["Requests"]) {
+    Request requests = Request(u["rid"], u["uid"], u["description"], u["name"],
+        u["city"], u["date"], u["qnty"], u["status"]);
     cust.add(requests);
   }
   return cust;

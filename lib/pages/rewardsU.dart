@@ -1,4 +1,6 @@
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
@@ -51,6 +53,13 @@ class _RewardsPageState extends State<RewardsPage> {
                       trailing: Text("\n${snapshot.data[index].vouc_code}",
                         style: TextStyle(color: Colors.red),
                       ),
+                      onTap: (){
+                        print("taped");
+                        Clipboard.setData(new ClipboardData(text: snapshot.data[index].vouc_code)).then((value){
+                          Scaffold.of(context).showSnackBar(
+                              SnackBar(content:Text("Coupon code copied to clipboard")));
+                        });
+                      },
                     );
                   },
                 );
